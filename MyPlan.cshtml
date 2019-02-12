@@ -1,0 +1,180 @@
+﻿@{
+    ViewBag.Title = "My Plans";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+@section scripts {
+    <script src="@Url.Content("~/Scripts/STRATEGY.User/STRATEGY.User.MyPlan.js")" type="text/javascript"></script>
+}
+
+
+@section ReadyScripts
+{
+STRATEGY.User.MyPlan.pageLoad();
+}
+
+
+<div class="main-page">
+	<div id="CustomerDetailContainer">
+        <div id="generalSection">
+			<div class="row">
+				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 fadeInDown animated">		
+					<div class="plan" data-bind="visible: ShowCurrentPlanDetail" style="display:none; float: left;">
+						<div class="plan-content plan3">
+							<div class="plan-title" data-bind="text: UserPlanName"></div>
+							<div class="plan-price">
+								<div class="price"><span data-bind="text: UserNoOfUserInPlan"></span></div>
+								<div class="price-period">Users</div>
+							</div>
+							<div class="arrow"></div>
+							<table class="table clr-plan3 table-striped theme-table">						
+								<tbody>
+									<tr><td><span class="text">(<span data-bind="text: StartDate"></span> <b class="to">to</b>  <span data-bind=" text: EndDate"></span>)</span></td></tr>
+									<tr><td><span class="text" data-bind="visible: GoalDeployment">Goal Deployment</span></td></tr>
+									<tr><td><span class="text" data-bind="visible: KPIDeployment">KPI Deployment</span></td></tr>
+									<tr><td><span class="text" data-bind="visible: Branding">Branding</span></td></tr>
+								</tbody>
+							</table>
+							<div class="plan-login">
+							</div>
+						</div>
+					</div>
+					<div class="PlanPanel panel-default data-bind="visible: ShowAddPlanbtn" style="display:none;">
+						<div class="panel-heading panelheadgray">
+							<h3 class="panel-title-sp panelfonttt error" style="line-height: 1"><span>No plan activated yet</span></h3>
+						</div>
+					</div>
+				</div>
+			
+			
+				<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"> 
+					<div class="table-overflow">
+						<table class="table table-bordered mb-none" id="hor-zebra">
+							<thead>
+								<tr class="primary">
+									<th></th>
+									<!-- ko foreach:PlanHistoryListTableHeaders   -->
+									<th scope="col" data-bind="html: ColumnText, click: Sort, css: SortOrder"></th>
+									<!-- /ko -->
+								</tr>
+							</thead>
+							
+							<tbody data-bind="template: { name: 'InvoiceListTemplate', foreach: MyPlanHistoryVMList }"></tbody>
+							<tr data-bind="visible: MyPlanHistoryVMList().length == 0 && !IsInitialLoading()" style="display: none;">
+								<td colspan="8">
+									<b>No Record Found</b>
+								</td>
+							</tr>
+							<script type="text/html" id="InvoiceListTemplate">
+								<tr data-bind=" visible: StartDate">
+									<td>
+										<i data-bind="visible:Invoices.length>0" style="cursor: pointer;" class="fa text-primary h5 m-none fa-minus-square-o" data-toggle="" onclick="Collaspe(this)"></i>
+									</td>
+									<td>
+										<span data-bind=" text: PlanName"></span>
+									</td>
+									<td>
+										<span data-bind=" text: StartDate"></span>
+									</td>
+									<td>
+										<span data-bind=" text: EndDate"></span>
+									</td>
+									<td>
+										<span data-bind=" text: PaymentMethod"></span>
+									</td>
+									<td>
+										<span data-bind="visible:!IsFree(), text: GrandTotal"></span>
+										<span data-bind="visible:IsFree()">Free plan</span>
+									</td>
+								</tr>
+								 <!-- ko if: Invoices.length>0 -->
+								
+								<tr>
+									<td></td>
+									<td colspan="5" class="p-none">
+										<table class="col-md-12 col-lg-12 col-sm-12 p-md  table-simple">
+											<thead>
+												<tr class="primary">
+													<th>Invoice Number</th>
+													 <th>Start Date</th>
+													 <th>End Date</th>
+													 <th>Amount Paid</th>
+												</tr>
+											</thead>
+											<tbody>
+												<!-- ko foreach:Invoices   -->
+												<tr>
+													<td><a data-bind="attr:{href: InvoiceViewUrl }"><span data-bind=" text: InvoiceNumber"></span></a></td>
+													<td data-bind=" text: PlanStartDate"></></td>
+													<td data-bind=" text: PlanEndDate"></></td>
+													<td data-bind=" text: TotalAmount"></></td>
+												</tr>
+												<!-- /ko -->
+											</tbody>
+										</table>
+									</td>
+								</tr>
+								
+								<!-- /ko -->
+								@*<tr style="display:none;background: none repeat scroll 0% 0% white;">
+									<td colspan="5" class="plan-history-row"  data-bind="visible: StartDate">
+										<div  class="plan-detail" style="height:auto;width:100%" >
+											<table class="table mb-none">
+												<tr data-bind="visible: InvoiceId">
+													<td>Invoice Number</td>
+													<td><a data-bind="attr: { href: ViewUrl }" target="_blank"><span data-bind="    text: InvoiceNumber"></span></a></td>
+												</tr>
+												<tr> 
+													<td>No of Users</td>
+													<td data-bind="text: UserLimit"></td>
+												</tr>
+												<tr data-bind="visible: TotalAmount">
+													<td>Amount/Month</td>
+													<td>@ViewBag.Currency <span data-bind="text: TotalAmount"></span></td>
+												</tr><tr data-bind="visible: Modules">
+													<td>Modules</td>
+													<td data-bind="text: Modules"></td>
+												</tr>
+												<tr data-bind="visible: StartDate">
+													<td>Access Period</td>
+													<td><span data-bind="text: StartDate"></span> to  <span data-bind="    text: EndDate"></span></td>
+												</tr>
+											</table>
+										</div>
+									</td>
+								</tr>*@
+							</script>
+						</table>
+						<div class="_PlanHistoryPager"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+    function Collaspe(id)
+    {
+        var div=$(id).parent().parent().next();
+        
+        if ($(div).is(":visible")) {
+            div.hide();
+            $(id).addClass('fa-plus-square-o');
+            $(id).removeClass('fa-minus-square-o');
+        }
+        else {
+            div.show();
+            $(id).addClass('fa-minus-square-o');
+            $(id).removeClass('fa-plus-square-o');
+            
+        }
+    }
+</script>
+
+
+
+
+    </div>
+</div>
